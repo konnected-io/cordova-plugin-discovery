@@ -88,9 +88,7 @@ public class cordovaSSDP extends CordovaPlugin {
         StringBuffer discoveryMessage = new StringBuffer();
         discoveryMessage.append("M-SEARCH * HTTP/1.1\r\n");
         discoveryMessage.append("HOST: " + SSDP_IP + ":" + SSDP_PORT + "\r\n");
-        
-        discoveryMessage.append("ST:"+service+"\r\n");
-        //discoveryMessage.append("ST:ssdp:all\r\n");
+        discoveryMessage.append("ST: "+service+"\r\n");
         discoveryMessage.append("MAN: \"ssdp:discover\"\r\n");
         discoveryMessage.append("MX: 2\r\n");
         discoveryMessage.append("\r\n");
@@ -127,7 +125,7 @@ public class cordovaSSDP extends CordovaPlugin {
                         device.put("USN", parseHeaderValue(message, "USN"));
                         device.put("LOCATION", parseHeaderValue(message, "LOCATION"));
                         device.put("ST", parseHeaderValue(message, "ST"));
-                        device.put("Server", parseHeaderValue(message, "Server"));
+                        device.put("SERVER", parseHeaderValue(message, "Server"));
                         createServiceObjWithXMLData(parseHeaderValue(message, "LOCATION"), device);
                     } catch (JSONException e) {
                         e.printStackTrace();
