@@ -72,9 +72,9 @@ NSMutableArray *serviceArr;
 
                         NSLog(@"recv: On to listening");
 
-                        // set timeout to 2 seconds.
+                        // set timeout to 5 seconds.
                         struct timeval timeV;
-                        timeV.tv_sec = 2;
+                        timeV.tv_sec = 5;
                         timeV.tv_usec = 0;
 
                         if (setsockopt(sd, SOL_SOCKET, SO_RCVTIMEO, &timeV, sizeof(timeV)) == -1) {
