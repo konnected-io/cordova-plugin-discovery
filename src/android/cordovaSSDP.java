@@ -74,7 +74,7 @@ public class cordovaSSDP extends CordovaPlugin {
 
     public void search(String service, CallbackContext callbackContext) throws IOException {
         final int SSDP_PORT = 1900;
-        final int SSDP_SEARCH_PORT = 1901;
+        final int SSDP_SEARCH_PORT = 12000;
         final String SSDP_IP = "239.255.255.250";
         int TIMEOUT = 6000;
 
@@ -100,8 +100,9 @@ public class cordovaSSDP extends CordovaPlugin {
         MulticastSocket multicast = null;
         try {
             multicast = new MulticastSocket(null);
+            multicast.setReuseAddress(true);
             multicast.bind(srcAddress);
-            multicast.setTimeToLive(4);
+            multicast.setTimeToLive(10);
             multicast.send(discoveryPacket);
         } finally {
             multicast.disconnect();
@@ -112,7 +113,9 @@ public class cordovaSSDP extends CordovaPlugin {
         DatagramSocket wildSocket = null;
         DatagramPacket receivePacket;
         try {
-            wildSocket = new DatagramSocket(SSDP_SEARCH_PORT);
+            wildSocket = new DatagramSocket(null);
+            wildSocket.setReuseAddress(true);
+            wildSocket.bind(srcAddress);
             wildSocket.setSoTimeout(TIMEOUT);
 
             while (true) {
