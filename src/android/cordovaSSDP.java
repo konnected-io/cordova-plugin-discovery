@@ -74,11 +74,11 @@ public class cordovaSSDP extends CordovaPlugin {
 
     public void search(String service, CallbackContext callbackContext) throws IOException {
         final int SSDP_PORT = 1900;
-        final int SSDP_SEARCH_PORT = 12000;
         final String SSDP_IP = "239.255.255.250";
         int TIMEOUT = 6000;
+        int ephemeralPort = 0;
 
-        InetSocketAddress srcAddress = new InetSocketAddress(SSDP_SEARCH_PORT);
+        InetSocketAddress srcAddress = new InetSocketAddress(0);
         InetSocketAddress dstAddress = new InetSocketAddress(InetAddress.getByName(SSDP_IP), SSDP_PORT);
 
         // Clear the cached Device List every time a new search is called
@@ -102,6 +102,7 @@ public class cordovaSSDP extends CordovaPlugin {
             multicast = new MulticastSocket(null);
             multicast.setReuseAddress(true);
             multicast.bind(srcAddress);
+            ephemeralPort = multicast.getLocalPort();
             multicast.setTimeToLive(10);
             multicast.send(discoveryPacket);
         } finally {
@@ -113,9 +114,7 @@ public class cordovaSSDP extends CordovaPlugin {
         DatagramSocket wildSocket = null;
         DatagramPacket receivePacket;
         try {
-            wildSocket = new DatagramSocket(null);
-            wildSocket.setReuseAddress(true);
-            wildSocket.bind(srcAddress);
+            wildSocket = new DatagramSocket(ephemeralPort);
             wildSocket.setSoTimeout(TIMEOUT);
 
             while (true) {
