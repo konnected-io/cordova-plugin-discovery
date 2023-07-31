@@ -67,7 +67,7 @@ public class cordovaSSDP extends CordovaPlugin {
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody,
                                   Throwable error) {
-                LOG.e(TAG, responseBody.toString());
+                LOG.e(TAG, responseBody == null ? "" : responseBody.toString());
             }
         });
     }
